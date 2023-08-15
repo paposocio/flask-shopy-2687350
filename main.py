@@ -1,5 +1,8 @@
 # dependencias del proyecto
-from flask import Flask 
+from flask import Flask, render_template 
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
@@ -13,6 +16,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 #crear el objeto de migracion y activarlo
 migrate = Migrate(app , db)
+
+#crear el formulario de registro
+#de productos
+class RegistroProductosForm(FlaskForm):
+    nombre_producto = StringField('Nombre del producto')
+
 
 ##Modelos <<entities>>
 class Cliente(db.Model):
@@ -29,9 +38,9 @@ class Producto(db.Model):
     id = db.Column(db.Integer , primary_key=True)
     nombre = db.Column(db.String(64))
     precio = db.Column(db.Numeric(precision = 10 , 
-                                  scale = 2),
-                       nullable = False )
-    imagen = db.Column(db.String(100))
+                                  scale = 2) )
+    imagen = db.Column(db.String(100),
+                        nullable = True)
 
 
 
@@ -53,6 +62,12 @@ class Detalle(db.Model):
     producto_id = db.Column(db.Integer, 
                 db.ForeignKey('productos.id'))
     cantidad = db.Column(db.Integer)
+
+@app.route('/productos/registrar')
+def registrar():
+    return render_template('registrar.html')
+
+
 
 
 
