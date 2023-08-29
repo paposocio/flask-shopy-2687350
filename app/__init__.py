@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -22,3 +22,9 @@ app.register_blueprint(productos)
 
 #traer los modelos
 from .models import Producto,Cliente, Venta, Detalle
+
+#ruta de prueba
+#de la masterpage
+@app.route("/master")
+def master():
+    return render_template("base.html")
